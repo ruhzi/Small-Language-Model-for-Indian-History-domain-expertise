@@ -1,8 +1,7 @@
 # Small Language Model for Indian History: On-Policy Reverse-KL Distillation
 
-Distilling a frozen **Qwen3-8B** teacher into a **Qwen3-1.7B** student on a self-curated benchmark of 580 Indian-history essay questions, using **on-policy reverse-KL knowledge distillation** (the student samples its own answers, the teacher scores every token, and the student minimises KL(student ‖ teacher) on those tokens). Student and base model are then scored on a held-out set by a GPT-5.4 LLM-as-a-judge.
+Distilling a frozen **Qwen3-4B** teacher into a **Qwen3-1.7B** student on a self-curated benchmark of 580 Indian-history essay questions, using **on-policy reverse-KL knowledge distillation** (the student samples its own answers, the teacher scores every token, and the student minimises KL(student ‖ teacher) on those tokens). Student and base model are then scored on a held-out set by a GPT-5.4 LLM-as-a-judge.
 
-- **Live demo**: https://huggingface.co/spaces/ruhzi/SLM
 - **Model weights**: https://huggingface.co/ruhzi/Indian_History_SLM
 - **Training pipeline**: [`distill_indian_history.ipynb`](distill_indian_history.ipynb)
 - **Evaluation**: [`llm_as_a_judge.ipynb`](llm_as_a_judge.ipynb)
@@ -45,19 +44,19 @@ For every training question:
 
 | Setting | Value |
 |---|---|
-| Teacher | `Qwen/Qwen3-8B`, bf16, frozen |
+| Teacher | `Qwen/Qwen3-4B`, bf16, frozen |
 | Student | `Qwen/Qwen3-1.7B`, bf16, full fine-tune, gradient checkpointing |
 | Epochs | 1 (498 rollouts, 62 optimizer steps) |
 | Effective batch | 8 (micro-batch 1 × grad-accum 8) |
 | LR | 2e-5, 10 % warmup, cosine decay |
 | Max prompt / rollout / sequence | 384 / 512 / 896 tokens |
-| Hardware | 1× A100 40 GB (Colab) |
+| Hardware | 1× NVIDIA L4 24 GB (Colab) |
 
 ## Training
 
 ![Training loss](assets/training_curves.png)
 
-Reverse KL falls from roughly 1.0 at the start of training to about 0.8 by the end. The earlier logged run (Qwen3-4B teacher on an L4, preserved in git history) reported a first-third average of 0.911 against a last-third average of 0.842, with an epoch mean of 0.858. Almost all wall-clock time is spent in the on-policy rollout: 126 of 131 minutes in that run.
+Reverse KL falls from roughly 1.0 at the start of training to about 0.8 by the end: the first third of steps averages 0.911, the last third 0.842, with an epoch mean of 0.858. Almost all wall-clock time is spent in the on-policy rollout: 126 of 131 minutes.
 
 ## Evaluation: GPT-5.4 as judge
 
@@ -79,7 +78,7 @@ Both notebooks are written for Google Colab.
 
 **Distillation** (`distill_indian_history.ipynb`, GPU runtime):
 
-1. Pick an A100 (an L4 works with the smaller Qwen3-4B teacher).
+1. Pick an L4 or better. Teacher (~8 GB) and student (~3.5 GB plus activations) fit in 24 GB with gradient checkpointing.
 2. Upload `fully_tagged_dataset.jsonl` to the runtime.
 3. Run the cells top to bottom. Cell 1 removes Colab's torchvision/torchaudio builds, which otherwise crash `transformers` on import.
 4. Artifacts (model, tokenizer, `training_metadata.json`, eval generations, loss plot) are written to Google Drive in the last cells.
