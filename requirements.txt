@@ -1,0 +1,9 @@
+# Core (Colab provides torch with CUDA; do not pin torch here)
+transformers>=4.51.0
+datasets
+accelerate
+tiktoken
+einops
+matplotlib
+pandas
+requests
