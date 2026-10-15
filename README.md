@@ -6,12 +6,6 @@ Distilling a frozen **Qwen3-4B** teacher into a **Qwen3-1.7B** student on a self
 - **Training pipeline**: [`distill_indian_history.ipynb`](distill_indian_history.ipynb)
 - **Evaluation**: [`llm_as_a_judge.ipynb`](llm_as_a_judge.ipynb)
 
-## Why this setup
-
-- **Domain**: Indian history is a domain where small models hedge badly on contested topics (Partition, Emergency, Article 370, communal riots). The benchmark was built to be heavy on exactly those questions.
-- **On-policy distillation** instead of SFT on teacher outputs: the student is corrected on *its own* distribution of mistakes rather than imitating teacher text it would never have produced. Reverse KL is mode-seeking, so the student commits to the teacher's preferred answer rather than averaging over all plausible ones.
-- **Non-thinking mode** (`enable_thinking=False`) for both models so the distillation signal is on the answer tokens, not on hidden reasoning traces.
-
 ## Dataset
 
 `fully_tagged_dataset.jsonl`: 580 questions, one per line, in chat format with two labels each.
