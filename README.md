@@ -69,9 +69,9 @@ Both the distilled student and the untouched base Qwen3-1.7B answer the 82 held-
 | Academic tone | 3.47 | **4.02** |
 | Thematic coherence | 3.54 | **4.30** |
 | Broad relevance | 3.96 | **4.65** |
-| **Overall (mean of 4)** | 3.63 | **4.06** |
+| **Overall (mean of 4)** | 3.63 | **4.05** |
 
-Paired by question, the student scores higher on 16, lower on 49, and ties on 14. The student's answers are longer (median 280 vs 191 words) and use markdown structure more often (40 vs 26 of 82), which is where its structure gain comes from; the base model scores higher on tone, coherence and relevance. By bucket, the gap is largest on explanatory questions (T-A: 3.40 vs 4.01) and pre-colonial questions (TP-A: 3.63 vs 4.25), and closes to zero on the small contemporary (TP-D) and normative (T-B) buckets.
+Paired by question, the student scores higher on 16, lower on 49, and ties on 14. The student's answers are longer (median 282 vs 191 words) and use markdown structure more often (40 vs 26 of 82), which is where its structure gain comes from; the base model scores higher on tone, coherence and relevance. By bucket, the gap is largest on explanatory questions (T-A: 3.40 vs 4.03) and pre-colonial questions (TP-A: 3.63 vs 4.25), and closes to zero on the small contemporary (TP-D) and normative (T-B) buckets.
 
 ## Running it
 
